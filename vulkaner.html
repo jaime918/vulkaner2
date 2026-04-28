@@ -1,0 +1,2028 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VULKANER · Single Malt Whisky · Forjado en fuego</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Italiana&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  /* ─────────────────────────────────────────────
+     VULKANER — Sistema de diseño
+     ───────────────────────────────────────────── */
+  :root {
+    --obsidian:       #0a0805;
+    --char:           #14100a;
+    --ash:            #1c1812;
+    --ember:          #c9a35a;
+    --ember-bright:   #e0b86b;
+    --copper:         #a96b3c;
+    --rust:           #8a4a23;
+    --cream:          #e8dcc4;
+    --parchment:      #d4c5a3;
+    --muted:          #6e6147;
+    --line:           rgba(201,163,90,0.18);
+    --line-soft:      rgba(201,163,90,0.08);
+
+    --f-display:      'Italiana', serif;
+    --f-serif:        'Cormorant Garamond', serif;
+    --f-body:         'Spectral', serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--obsidian);
+    color: var(--cream);
+    font-family: var(--f-body);
+    font-weight: 300;
+    line-height: 1.65;
+    overflow-x: hidden;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Grano sutil sobre toda la página */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 200;
+    opacity: 0.25;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.8 0 0 0 0 0.65 0 0 0 0 0.35 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  ::selection { background: var(--ember); color: var(--obsidian); }
+
+  /* ─────────────────────────────────────────────
+     NAVEGACIÓN
+     ───────────────────────────────────────────── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 28px 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(180deg, rgba(10,8,5,0.85) 0%, rgba(10,8,5,0.4) 70%, transparent 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: padding 0.4s ease, background 0.4s ease;
+  }
+  nav.scrolled { padding: 16px 56px; background: rgba(10,8,5,0.96); border-bottom: 1px solid var(--line-soft); }
+
+  .brand {
+    font-family: var(--f-display);
+    font-size: 1.5rem;
+    letter-spacing: 0.5em;
+    color: var(--cream);
+    text-decoration: none;
+    padding-left: 0.5em;
+    position: relative;
+  }
+  .brand::before {
+    content: "◆";
+    position: absolute;
+    left: -1.2em;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ember);
+    font-size: 0.6em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 48px;
+    list-style: none;
+    margin: 0; padding: 0;
+  }
+  .nav-links a {
+    font-family: var(--f-serif);
+    font-size: 0.78rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s ease;
+  }
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 50%; bottom: -6px;
+    width: 0; height: 1px;
+    background: var(--ember);
+    transition: all 0.4s ease;
+  }
+  .nav-links a:hover { color: var(--ember-bright); }
+  .nav-links a:hover::after { width: 100%; left: 0; }
+
+  /* ─────────────────────────────────────────────
+     HERO — Full-bleed con fotografía real
+     ───────────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 120px 56px 80px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background-image: url("vulkaner-hero.jpg");
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.05);
+    animation: slowZoom 20s ease-in-out infinite alternate;
+  }
+  @keyframes slowZoom {
+    from { transform: scale(1.05); }
+    to { transform: scale(1.15); }
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(90deg, rgba(10,8,5,0.95) 0%, rgba(10,8,5,0.55) 45%, rgba(10,8,5,0.15) 100%),
+      linear-gradient(180deg, rgba(10,8,5,0.3) 0%, transparent 30%, rgba(10,8,5,0.9) 100%);
+  }
+
+  .hero-content {
+    max-width: 720px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--f-serif);
+    font-size: 0.78rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 32px;
+    position: relative;
+    padding-left: 60px;
+    opacity: 0;
+    animation: fadeIn 1.4s ease 0.2s forwards;
+  }
+  .hero-eyebrow::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 50%;
+    width: 44px; height: 1px;
+    background: var(--ember);
+  }
+
+  .hero h1 {
+    font-family: var(--f-display);
+    font-size: clamp(4rem, 12vw, 12rem);
+    line-height: 0.92;
+    margin: 0;
+    color: var(--cream);
+    letter-spacing: 0.04em;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.6);
+  }
+  .hero h1 span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: rise 1.2s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .hero h1 span:nth-child(1) { animation-delay: 0.4s; }
+  .hero h1 span:nth-child(2) { animation-delay: 0.5s; }
+  .hero h1 span:nth-child(3) { animation-delay: 0.6s; }
+  .hero h1 span:nth-child(4) { animation-delay: 0.7s; }
+  .hero h1 span:nth-child(5) { animation-delay: 0.8s; }
+  .hero h1 span:nth-child(6) { animation-delay: 0.9s; }
+  .hero h1 span:nth-child(7) { animation-delay: 1.0s; }
+  .hero h1 span:nth-child(8) { animation-delay: 1.1s; }
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  .hero-tagline {
+    font-family: var(--f-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1.5rem;
+    color: var(--parchment);
+    margin-top: 40px;
+    max-width: 28em;
+    line-height: 1.5;
+    opacity: 0;
+    animation: fadeIn 1.4s ease 1.3s forwards;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 56px;
+    margin-top: 64px;
+    opacity: 0;
+    animation: fadeIn 1.4s ease 1.5s forwards;
+  }
+  .hero-meta div {
+    border-left: 1px solid var(--line);
+    padding-left: 20px;
+  }
+  .hero-meta .num {
+    font-family: var(--f-display);
+    font-size: 2.4rem;
+    color: var(--ember);
+    line-height: 1;
+    display: block;
+  }
+  .hero-meta .lbl {
+    font-family: var(--f-serif);
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    margin-top: 8px;
+    display: block;
+  }
+
+  /* Indicador scroll */
+  .scroll-cue {
+    position: absolute;
+    bottom: 36px;
+    left: 56px;
+    font-family: var(--f-serif);
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeIn 1.4s ease 1.8s forwards;
+    z-index: 2;
+  }
+  .scroll-cue::after {
+    content: "";
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--ember), transparent);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* ─────────────────────────────────────────────
+     SECCIONES — base
+     ───────────────────────────────────────────── */
+  section { position: relative; z-index: 2; }
+
+  .section-pad { padding: 140px 56px; }
+
+  .section-label {
+    font-family: var(--f-serif);
+    font-size: 0.72rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-label::before {
+    content: "";
+    width: 32px;
+    height: 1px;
+    background: var(--ember);
+  }
+
+  .section-title {
+    font-family: var(--f-display);
+    font-size: clamp(2.6rem, 5vw, 4.8rem);
+    line-height: 1.05;
+    margin: 0 0 48px;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+    font-weight: 400;
+  }
+  .section-title em {
+    font-family: var(--f-serif);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--ember);
+  }
+
+  /* ─────────────────────────────────────────────
+     ORIGEN — con imagen de Escocia
+     ───────────────────────────────────────────── */
+  .origen {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 96px;
+    align-items: center;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .origen-visual {
+    position: relative;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--ash);
+  }
+  .origen-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.65) contrast(1.1) saturate(0.85);
+    transition: transform 1.5s cubic-bezier(.2,.7,.2,1);
+  }
+  .origen-visual:hover img { transform: scale(1.05); }
+  .origen-visual::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(10,8,5,0.85) 100%);
+    pointer-events: none;
+  }
+  .origen-visual-caption {
+    position: absolute;
+    bottom: 32px;
+    left: 32px;
+    z-index: 2;
+  }
+  .origen-visual-caption .place {
+    font-family: var(--f-serif);
+    font-size: 0.72rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ember);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .origen-visual-caption .est {
+    font-family: var(--f-display);
+    font-size: 1.6rem;
+    letter-spacing: 0.3em;
+    color: var(--cream);
+  }
+
+  .origen-text p {
+    font-size: 1.15rem;
+    line-height: 1.85;
+    color: var(--parchment);
+    margin: 0 0 24px;
+  }
+  .origen-text p:first-of-type::first-letter {
+    font-family: var(--f-display);
+    font-size: 4.5rem;
+    float: left;
+    line-height: 0.85;
+    margin: 8px 16px 0 0;
+    color: var(--ember);
+  }
+
+  .origen-text .signature {
+    margin-top: 48px;
+    font-family: var(--f-serif);
+    font-style: italic;
+    color: var(--muted);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+  }
+  .origen-text .signature::before {
+    content: "— ";
+    color: var(--ember);
+  }
+
+  /* ─────────────────────────────────────────────
+     PROCESO — con imagen de barricas
+     ───────────────────────────────────────────── */
+  .proceso {
+    background: var(--char);
+    border-top: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .proceso-banner {
+    height: 60vh;
+    min-height: 480px;
+    background-image:
+      linear-gradient(180deg, rgba(10,8,5,0.4) 0%, rgba(10,8,5,0.85) 100%),
+      url("https://images.unsplash.com/photo-1534655882117-f9eff36a1574?w=2400&q=85&auto=format&fit=crop");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: flex-end;
+    padding: 80px 56px;
+    position: relative;
+  }
+
+  .proceso-banner-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: end;
+  }
+  .proceso-banner-content p {
+    font-family: var(--f-serif);
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--parchment);
+    line-height: 1.6;
+    margin: 0;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.6);
+  }
+
+  .proceso-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 0 56px;
+  }
+
+  .step {
+    padding: 80px 36px 80px 0;
+    border-right: 1px solid var(--line);
+    position: relative;
+    transition: background 0.5s ease;
+  }
+  .step:first-child { padding-left: 0; }
+  .step:last-child { border-right: none; padding-right: 0; }
+  .step:not(:first-child) { padding-left: 36px; }
+  .step:hover { background: rgba(201,163,90,0.04); }
+
+  .step-num {
+    font-family: var(--f-display);
+    font-size: 3.5rem;
+    color: var(--ember);
+    line-height: 1;
+    margin-bottom: 24px;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+  .step:hover .step-num { opacity: 1; }
+
+  .step h3 {
+    font-family: var(--f-serif);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--cream);
+    margin: 0 0 16px;
+    letter-spacing: 0.02em;
+  }
+  .step p {
+    font-size: 0.98rem;
+    color: var(--parchment);
+    line-height: 1.7;
+    margin: 0;
+    opacity: 0.85;
+  }
+
+  /* ─────────────────────────────────────────────
+     NOTAS DE CATA — con imagen de copa
+     ───────────────────────────────────────────── */
+  .cata {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 96px;
+    align-items: start;
+  }
+
+  .cata-glass {
+    position: sticky;
+    top: 120px;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--ash);
+  }
+  .cata-glass img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.85) contrast(1.05) saturate(1.1);
+  }
+
+  .cata-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .nota {
+    padding: 36px 0;
+    border-bottom: 1px solid var(--line-soft);
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 32px;
+    align-items: baseline;
+    transition: padding 0.4s ease;
+  }
+  .nota:hover { padding-left: 16px; }
+  .nota:last-child { border-bottom: none; }
+
+  .nota-label {
+    font-family: var(--f-serif);
+    font-size: 0.78rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ember);
+  }
+  .nota-content h4 {
+    font-family: var(--f-display);
+    font-size: 2.2rem;
+    color: var(--cream);
+    margin: 0 0 12px;
+    font-weight: 400;
+  }
+  .nota-content p {
+    font-size: 1.05rem;
+    color: var(--parchment);
+    margin: 0;
+    line-height: 1.7;
+  }
+
+  /* ─────────────────────────────────────────────
+     COLECCIÓN — con fotos de botellas
+     ───────────────────────────────────────────── */
+  .coleccion {
+    background: linear-gradient(180deg, var(--obsidian) 0%, var(--char) 100%);
+    border-top: 1px solid var(--line-soft);
+    text-align: center;
+  }
+  .coleccion .section-label { justify-content: center; }
+  .coleccion .section-label::before { display: none; }
+  .coleccion .section-title { text-align: center; max-width: 14em; margin: 0 auto 80px; }
+
+  .bottles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+    margin-top: 64px;
+  }
+
+  .bottle-card {
+    border: 1px solid var(--line);
+    background: var(--obsidian);
+    text-align: center;
+    transition: all 0.6s cubic-bezier(.2,.7,.2,1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .bottle-card:hover {
+    border-color: var(--ember);
+    transform: translateY(-8px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  }
+
+  .bottle-img {
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    background: var(--ash);
+    position: relative;
+  }
+  .bottle-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.78) contrast(1.1);
+    transition: transform 0.8s cubic-bezier(.2,.7,.2,1), filter 0.5s ease;
+  }
+  .bottle-card:hover .bottle-img img {
+    transform: scale(1.05);
+    filter: brightness(0.9) contrast(1.1);
+  }
+
+  .bottle-info {
+    padding: 40px 32px 36px;
+  }
+
+  .bottle-edition {
+    font-family: var(--f-serif);
+    font-size: 0.72rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 12px;
+  }
+  .bottle-name {
+    font-family: var(--f-display);
+    font-size: 2rem;
+    color: var(--cream);
+    margin: 0 0 12px;
+    letter-spacing: 0.05em;
+  }
+  .bottle-age {
+    font-family: var(--f-serif);
+    font-style: italic;
+    color: var(--parchment);
+    font-size: 1.05rem;
+    margin-bottom: 24px;
+  }
+  .bottle-desc {
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 0 0 24px;
+  }
+  .bottle-price {
+    font-family: var(--f-display);
+    font-size: 1.4rem;
+    color: var(--ember);
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--line-soft);
+    padding-top: 20px;
+  }
+
+  /* ─────────────────────────────────────────────
+     RECONOCIMIENTOS
+     ───────────────────────────────────────────── */
+  .premios {
+    border-top: 1px solid var(--line-soft);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .premios::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(169,107,60,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .premios .section-label { justify-content: center; }
+  .premios .section-label::before { display: none; }
+  .premios .section-title { text-align: center; }
+
+  .premios-quote {
+    font-family: var(--f-serif);
+    font-style: italic;
+    font-size: 1.6rem;
+    line-height: 1.6;
+    max-width: 26em;
+    margin: 0 auto 24px;
+    color: var(--parchment);
+    position: relative;
+  }
+  .premios-quote::before, .premios-quote::after {
+    content: "“";
+    font-family: var(--f-display);
+    color: var(--ember);
+    font-size: 3rem;
+    line-height: 0;
+    position: relative;
+    top: 0.2em;
+  }
+  .premios-quote::after { content: "”"; }
+  .premios-author {
+    font-family: var(--f-serif);
+    font-size: 0.78rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 96px;
+  }
+
+  .premios-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 48px;
+    border-top: 1px solid var(--line);
+    padding-top: 64px;
+  }
+  .premio { text-align: center; }
+  .premio-medal {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    border: 1px solid var(--ember);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--f-display);
+    font-size: 1.4rem;
+    color: var(--ember);
+    position: relative;
+  }
+  .premio-medal::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+  }
+  .premio-year {
+    font-family: var(--f-display);
+    font-size: 1.5rem;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+  .premio-name {
+    font-family: var(--f-serif);
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ─────────────────────────────────────────────
+     CTA / Reservar — con imagen de fondo
+     ───────────────────────────────────────────── */
+  .cta {
+    text-align: center;
+    border-top: 1px solid var(--line-soft);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .cta::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background-image: url("https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=2400&q=85&auto=format&fit=crop");
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.4);
+  }
+  .cta::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, rgba(10,8,5,0.85) 0%, rgba(10,8,5,0.65) 50%, rgba(10,8,5,0.95) 100%),
+      radial-gradient(ellipse at 50% 100%, rgba(169,107,60,0.18) 0%, transparent 60%);
+  }
+  .cta-title {
+    font-family: var(--f-display);
+    font-size: clamp(2.4rem, 5vw, 4.4rem);
+    color: var(--cream);
+    margin: 0 0 24px;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    text-shadow: 0 2px 30px rgba(0,0,0,0.7);
+  }
+  .cta-subtitle {
+    font-family: var(--f-serif);
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--parchment);
+    max-width: 30em;
+    margin: 0 auto 56px;
+    line-height: 1.6;
+  }
+  .btn {
+    display: inline-block;
+    padding: 22px 64px;
+    font-family: var(--f-serif);
+    font-size: 0.85rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--obsidian);
+    background: var(--ember);
+    text-decoration: none;
+    border: 1px solid var(--ember);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+  .btn::before {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: var(--ember-bright);
+    transition: left 0.5s ease;
+    z-index: -1;
+  }
+  .btn:hover::before { left: 0; }
+  .btn:hover {
+    color: var(--obsidian);
+    box-shadow: 0 12px 30px rgba(201,163,90,0.4);
+  }
+
+  /* ─────────────────────────────────────────────
+     FOOTER
+     ───────────────────────────────────────────── */
+  footer {
+    background: var(--obsidian);
+    padding: 80px 56px 32px;
+    border-top: 1px solid var(--line-soft);
+    position: relative;
+    z-index: 2;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 64px;
+  }
+  .footer-brand h3 {
+    font-family: var(--f-display);
+    font-size: 2.2rem;
+    letter-spacing: 0.4em;
+    color: var(--cream);
+    margin: 0 0 16px;
+  }
+  .footer-brand p {
+    font-family: var(--f-serif);
+    font-style: italic;
+    color: var(--muted);
+    font-size: 0.95rem;
+    max-width: 22em;
+    line-height: 1.6;
+  }
+  .footer-col h4 {
+    font-family: var(--f-serif);
+    font-size: 0.72rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin: 0 0 20px;
+  }
+  .footer-col ul {
+    list-style: none;
+    margin: 0; padding: 0;
+  }
+  .footer-col li { margin-bottom: 10px; }
+  .footer-col a {
+    color: var(--parchment);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+  }
+  .footer-col a:hover { color: var(--ember); }
+
+  .footer-bottom {
+    border-top: 1px solid var(--line-soft);
+    padding-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--f-serif);
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .footer-warning {
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-soft);
+    font-family: var(--f-serif);
+    font-style: italic;
+    font-size: 0.82rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─────────────────────────────────────────────
+     BODEGAS — sección interactiva por países
+     ───────────────────────────────────────────── */
+  .bodegas {
+    background: var(--char);
+    border-top: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+    position: relative;
+    overflow: hidden;
+  }
+  .bodegas::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+      linear-gradient(var(--line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size: 80px 80px;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .bodegas-header {
+    text-align: center;
+    margin-bottom: 80px;
+    position: relative;
+    z-index: 1;
+  }
+  .bodegas-header .section-label { justify-content: center; }
+  .bodegas-header .section-label::before { display: none; }
+  .bodegas-header .section-title {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .bodegas-intro {
+    font-family: var(--f-serif);
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--parchment);
+    max-width: 32em;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Pestañas de países */
+  .bodegas-tabs {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 80px;
+    position: relative;
+    z-index: 1;
+    background: var(--obsidian);
+  }
+  .bodega-tab {
+    background: none;
+    border: none;
+    border-right: 1px solid var(--line);
+    padding: 36px 16px;
+    cursor: pointer;
+    color: var(--parchment);
+    font-family: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    transition: background 0.4s ease;
+  }
+  .bodega-tab:last-child { border-right: none; }
+  .bodega-tab::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--ember);
+    transition: width 0.5s cubic-bezier(.2,.7,.2,1);
+  }
+  .bodega-tab.active::after { width: 50%; }
+  .bodega-tab:hover { background: rgba(201,163,90,0.04); }
+  .bodega-tab.active .tab-code { color: var(--ember-bright); }
+  .bodega-tab.active .tab-country { color: var(--cream); }
+
+  .tab-code {
+    font-family: var(--f-display);
+    font-size: 2.2rem;
+    letter-spacing: 0.18em;
+    color: var(--ember);
+    line-height: 1;
+    transition: color 0.3s ease;
+  }
+  .tab-country {
+    font-family: var(--f-serif);
+    font-size: 0.72rem;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    margin-top: 8px;
+    transition: color 0.3s ease;
+  }
+  .tab-place {
+    font-family: var(--f-serif);
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* Display de la bodega activa */
+  .bodega-display {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 80px;
+    align-items: stretch;
+    position: relative;
+    z-index: 1;
+    min-height: 600px;
+  }
+
+  .bodega-image {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--ash);
+  }
+  .bodega-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7) contrast(1.1) saturate(0.95);
+    transition: opacity 0.5s ease, transform 1.5s cubic-bezier(.2,.7,.2,1);
+  }
+  .bodega-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(10,8,5,0.6) 100%);
+    pointer-events: none;
+  }
+  .bodega-image-caption {
+    position: absolute;
+    bottom: 32px;
+    left: 32px;
+    z-index: 2;
+    font-family: var(--f-serif);
+    font-style: italic;
+    color: var(--parchment);
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    transition: opacity 0.5s ease;
+  }
+  .bodega-image-caption::before {
+    content: "◆ ";
+    color: var(--ember);
+  }
+
+  .bodega-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 32px 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .bodega-num {
+    font-family: var(--f-display);
+    font-size: 4.5rem;
+    color: var(--ember);
+    line-height: 1;
+    margin-bottom: 12px;
+    opacity: 0.35;
+  }
+  .bodega-country-name {
+    font-family: var(--f-serif);
+    font-size: 0.78rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 16px;
+  }
+  .bodega-name {
+    font-family: var(--f-display);
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    color: var(--cream);
+    margin: 0 0 28px;
+    letter-spacing: 0.02em;
+    line-height: 1.05;
+  }
+  .bodega-desc {
+    font-size: 1.05rem;
+    color: var(--parchment);
+    line-height: 1.75;
+    margin: 0 0 36px;
+  }
+
+  .bodega-details {
+    list-style: none;
+    margin: 0 0 40px;
+    padding: 0;
+    border-top: 1px solid var(--line-soft);
+  }
+  .bodega-details li {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 0.95rem;
+    align-items: baseline;
+  }
+  .bodega-details li span:first-child {
+    font-family: var(--f-serif);
+    font-size: 0.7rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .bodega-details li span:last-child {
+    color: var(--cream);
+    font-weight: 300;
+  }
+
+  .bodega-cta {
+    align-self: flex-start;
+    padding: 18px 48px;
+    font-size: 0.78rem;
+  }
+
+  .fade-out { opacity: 0 !important; }
+
+  /* ─────────────────────────────────────────────
+     FORMULARIO DE CONTACTO
+     ───────────────────────────────────────────── */
+  .contact-form {
+    border-top: 1px solid var(--line-soft);
+    background: var(--obsidian);
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-form::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 100%, rgba(169,107,60,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .contact-form-container {
+    max-width: 880px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .contact-form .section-label { justify-content: center; margin-bottom: 24px; }
+  .contact-form .section-label::before { display: none; }
+  .contact-form .section-title { text-align: center; }
+
+  .contact-form-intro {
+    font-family: var(--f-serif);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--parchment);
+    max-width: 32em;
+    margin: 0 auto 64px;
+    line-height: 1.6;
+  }
+
+  .contact-form-fields {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .form-field label {
+    font-family: var(--f-serif);
+    font-size: 0.7rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 14px;
+  }
+  .form-field label .optional {
+    color: var(--muted);
+    font-style: italic;
+    letter-spacing: 0.08em;
+    text-transform: none;
+  }
+
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    padding: 12px 0;
+    color: var(--cream);
+    font-family: var(--f-body);
+    font-size: 1rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.4s ease;
+    width: 100%;
+  }
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus {
+    border-bottom-color: var(--ember);
+  }
+  .form-field input::placeholder,
+  .form-field textarea::placeholder {
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .form-field textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+    font-family: var(--f-body);
+  }
+
+  .form-field select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23c9a35a' stroke-width='1' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 4px center;
+    cursor: pointer;
+    padding-right: 28px;
+  }
+  .form-field select option {
+    background: var(--obsidian);
+    color: var(--cream);
+    padding: 8px;
+  }
+
+  .form-field.has-error input,
+  .form-field.has-error select,
+  .form-field.has-error textarea {
+    border-bottom-color: #c44a3c;
+  }
+  .form-field.has-error label {
+    color: #c44a3c;
+  }
+
+  .form-submit {
+    margin-top: 24px;
+    text-align: center;
+  }
+  .form-disclaimer {
+    font-family: var(--f-serif);
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 24px;
+    letter-spacing: 0.03em;
+  }
+
+  /* Mensaje de éxito */
+  .form-success {
+    text-align: center;
+    padding: 48px 0 24px;
+  }
+  .form-success.show {
+    animation: successFadeIn 1s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  @keyframes successFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .success-mark {
+    font-size: 2.2rem;
+    color: var(--ember);
+    margin-bottom: 32px;
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.15); }
+  }
+  .success-title {
+    font-family: var(--f-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--cream);
+    margin: 0 0 16px;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+  }
+  .success-message {
+    font-family: var(--f-serif);
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--ember);
+    margin: 0 0 32px;
+  }
+  .success-detail {
+    font-size: 1rem;
+    color: var(--parchment);
+    max-width: 32em;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ─────────────────────────────────────────────
+     RESPONSIVE
+     ───────────────────────────────────────────── */
+  @media (max-width: 980px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .section-pad { padding: 96px 24px; }
+    .hero { padding: 120px 24px 80px; }
+    .hero h1 { font-size: clamp(3.2rem, 16vw, 6rem); }
+    .hero-meta { flex-wrap: wrap; gap: 24px; }
+    .scroll-cue { left: 24px; }
+    .origen { grid-template-columns: 1fr; gap: 48px; padding: 96px 24px; }
+    .origen-visual { aspect-ratio: 4/3; }
+    .proceso-banner { background-attachment: scroll; height: 50vh; min-height: 360px; padding: 60px 24px; }
+    .proceso-banner-content { grid-template-columns: 1fr; gap: 24px; }
+    .proceso-grid { grid-template-columns: 1fr 1fr; padding: 0 24px; }
+    .step { border-right: none; border-bottom: 1px solid var(--line); padding: 36px 0 36px 0 !important; }
+    .step:nth-child(odd) { border-right: 1px solid var(--line); padding-right: 24px !important; }
+    .step:nth-child(even) { padding-left: 24px !important; }
+    .step:nth-last-child(-n+2) { border-bottom: none; }
+    .cata { grid-template-columns: 1fr; gap: 48px; padding: 96px 24px; }
+    .cata-glass { position: relative; top: 0; aspect-ratio: 4/3; }
+    .nota { grid-template-columns: 1fr; gap: 8px; }
+    .bottles { grid-template-columns: 1fr; gap: 24px; }
+    .premios-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .bodegas-tabs { grid-template-columns: repeat(5, 1fr); }
+    .bodega-tab { padding: 18px 4px; gap: 4px; }
+    .tab-code { font-size: 1.2rem; letter-spacing: 0.1em; }
+    .tab-country { font-size: 0.55rem; letter-spacing: 0.2em; margin-top: 4px; }
+    .tab-place { display: none; }
+    .bodega-display { grid-template-columns: 1fr; gap: 32px; min-height: auto; }
+    .bodega-image { aspect-ratio: 4/3; }
+    .bodega-info { padding: 0; }
+    .bodega-num { font-size: 3rem; }
+    .bodega-details li { grid-template-columns: 1fr; gap: 4px; }
+    .form-row { grid-template-columns: 1fr; gap: 36px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════ NAV ══════════════════════════ -->
+<nav id="nav">
+  <a href="#" class="brand">VULKANER</a>
+  <ul class="nav-links">
+    <li><a href="#origen">Origen</a></li>
+    <li><a href="#proceso">El Proceso</a></li>
+    <li><a href="#cata">Notas</a></li>
+    <li><a href="#coleccion">Colección</a></li>
+    <li><a href="#bodegas">Bodegas</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════════════════ HERO ══════════════════════════ -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Single Malt Whisky · Edición Limitada</div>
+    <h1>
+      <span>V</span><span>U</span><span>L</span><span>K</span><span>A</span><span>N</span><span>E</span><span>R</span>
+    </h1>
+    <p class="hero-tagline">
+      Forjado en fuego. Refinado por el tiempo.<br>
+      Un whisky nacido del corazón ardiente de la tierra.
+    </p>
+    <div class="hero-meta">
+      <div>
+        <span class="num">137</span>
+        <span class="lbl">Años de Tradición</span>
+      </div>
+      <div>
+        <span class="num">25</span>
+        <span class="lbl">Años en Barrica</span>
+      </div>
+      <div>
+        <span class="num">III</span>
+        <span class="lbl">Generaciones</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">Desliza</div>
+</header>
+
+<!-- ══════════════════════════ ORIGEN ══════════════════════════ -->
+<section id="origen" class="section-pad origen">
+  <div class="origen-visual">
+    <img src="https://images.unsplash.com/photo-1693559018746-e627737a11d7?w=1600&q=85&auto=format&fit=crop" alt="Paisaje de las tierras altas de Escocia" loading="lazy">
+    <div class="origen-visual-caption">
+      <span class="place">Speyside · Escocia</span>
+      <span class="est">EST. 1887</span>
+    </div>
+  </div>
+
+  <div class="origen-text">
+    <div class="section-label">Capítulo I · Origen</div>
+    <h2 class="section-title">Donde la roca <em>respira</em>, el espíritu nace.</h2>
+    <p>
+      En el año 1887, Magnus Vulkaner descendió por las laderas de Speyside con una
+      convicción heredada de su abuelo: que el whisky más noble no se elabora; se
+      conjura. Eligió un valle donde el agua se filtra entre rocas volcánicas
+      ancestrales, ricas en minerales que ningún otro suelo conoce.
+    </p>
+    <p>
+      Tres generaciones después, cada gota de Vulkaner sigue brotando del mismo
+      manantial subterráneo. Las maltas se ahúman con turba extraída a mano, sobre
+      fuegos que arden continuamente desde hace más de un siglo. No replicamos
+      tradición: la mantenemos viva.
+    </p>
+    <p>
+      Cada barrica reposa en bodegas excavadas en piedra volcánica, donde el
+      tiempo respira distinto. La temperatura constante, la humedad mineral, el
+      silencio absoluto: condiciones imposibles de imitar.
+    </p>
+    <p class="signature">Magnus Vulkaner III, Maestro Destilador</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════ PROCESO ══════════════════════════ -->
+<section id="proceso" class="proceso">
+  <div class="proceso-banner">
+    <div class="proceso-banner-content">
+      <div>
+        <div class="section-label">Capítulo II · Maestría</div>
+        <h2 class="section-title">El arte de <em>destilar</em> el tiempo.</h2>
+      </div>
+      <p>
+        Cuatro etapas. Veinticinco años. Una sola botella entre mil. Cada paso
+        dictado no por la prisa, sino por la paciencia de quienes saben que lo
+        verdadero no admite atajos.
+      </p>
+    </div>
+  </div>
+
+  <div class="proceso-grid">
+    <div class="step">
+      <div class="step-num">I</div>
+      <h3>Malteado</h3>
+      <p>
+        Cebada escocesa seleccionada grano por grano, germinada sobre suelos
+        de piedra durante siete días. El humo de turba ancestral impregna el
+        cereal con notas que ningún otro proceso logra.
+      </p>
+    </div>
+    <div class="step">
+      <div class="step-num">II</div>
+      <h3>Destilación</h3>
+      <p>
+        Alambiques de cobre forjados a mano en 1923, los mismos que
+        utilizaba Magnus Vulkaner II. Una doble destilación lenta extrae
+        únicamente el corazón del espíritu.
+      </p>
+    </div>
+    <div class="step">
+      <div class="step-num">III</div>
+      <h3>Maduración</h3>
+      <p>
+        Veinticinco inviernos en barricas de roble americano y jerez Oloroso.
+        El whisky duerme en bodegas excavadas en roca volcánica, donde el
+        tiempo se mide por estaciones, no por relojes.
+      </p>
+    </div>
+    <div class="step">
+      <div class="step-num">IV</div>
+      <h3>Embotellado</h3>
+      <p>
+        Sin filtración fría. Sin colorantes. A su graduación natural de
+        barrica. Cada botella se numera, se sella con cera carmesí y se firma
+        a mano por el maestro destilador.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ NOTAS DE CATA ══════════════════════════ -->
+<section id="cata" class="section-pad cata">
+  <div class="cata-glass">
+    <img src="https://images.unsplash.com/photo-1571104508999-893933ded431?w=1200&q=85&auto=format&fit=crop" alt="Copa de whisky Vulkaner" loading="lazy">
+  </div>
+
+  <div>
+    <div class="section-label">Capítulo III · El paladar</div>
+    <h2 class="section-title">Una <em>conversación</em> entre el fuego y el tiempo.</h2>
+
+    <div class="cata-list">
+      <div class="nota">
+        <span class="nota-label">Color</span>
+        <div class="nota-content">
+          <h4>Ámbar antiguo</h4>
+          <p>Un dorado oscuro y profundo, atravesado por reflejos cobrizos. La luz se demora en él como en un atardecer perpetuo.</p>
+        </div>
+      </div>
+      <div class="nota">
+        <span class="nota-label">Aroma</span>
+        <div class="nota-content">
+          <h4>Cuero, miel, humo</h4>
+          <p>Capas de fruta confitada y vainilla envuelven un núcleo de turba ahumada. Notas de tabaco rubio, cuero curtido y un eco mineral inconfundible.</p>
+        </div>
+      </div>
+      <div class="nota">
+        <span class="nota-label">Boca</span>
+        <div class="nota-content">
+          <h4>Sedoso, profundo</h4>
+          <p>La entrada es aterciopelada: caramelo salado, naranja amarga, ciruela en almíbar. Después, un crescendo de roble especiado, chocolate negro y café tostado.</p>
+        </div>
+      </div>
+      <div class="nota">
+        <span class="nota-label">Final</span>
+        <div class="nota-content">
+          <h4>Largo · Misterioso</h4>
+          <p>Un final que se prolonga durante minutos, dejando recuerdos de jerez añejo, brasas de turba y, al fondo, un susurro salino que evoca las costas de Speyside.</p>
+        </div>
+      </div>
+      <div class="nota">
+        <span class="nota-label">Maridaje</span>
+        <div class="nota-content">
+          <h4>Solo, sin prisa</h4>
+          <p>Recomendamos disfrutarlo solo, en copa Glencairn, a temperatura ambiente. Si acaso, una sola gota de agua mineral. Nada más debe interferir.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ COLECCIÓN ══════════════════════════ -->
+<section id="coleccion" class="section-pad coleccion">
+  <div class="section-label">Capítulo IV · La Colección</div>
+  <h2 class="section-title">Tres <em>expresiones</em>. Una sola alma.</h2>
+
+  <div class="bottles">
+    <div class="bottle-card">
+      <div class="bottle-img">
+        <img src="https://images.unsplash.com/photo-1586734565008-fbdbc166fd6c?w=900&q=85&auto=format&fit=crop" alt="Vulkaner Reserva XII" loading="lazy">
+      </div>
+      <div class="bottle-info">
+        <div class="bottle-edition">Edición Clásica</div>
+        <h3 class="bottle-name">Reserva XII</h3>
+        <div class="bottle-age">12 años · 43% vol.</div>
+        <p class="bottle-desc">El alma joven de Vulkaner. Frutos secos, miel y un toque de humo que anuncia la grandeza por venir.</p>
+        <div class="bottle-price">€ 220</div>
+      </div>
+    </div>
+
+    <div class="bottle-card">
+      <div class="bottle-img">
+        <img src="https://images.unsplash.com/photo-1671713682331-98086e7b9804?w=900&q=85&auto=format&fit=crop" alt="Vulkaner Reserva XVIII" loading="lazy">
+      </div>
+      <div class="bottle-info">
+        <div class="bottle-edition">Edición Singular</div>
+        <h3 class="bottle-name">Reserva XVIII</h3>
+        <div class="bottle-age">18 años · 46% vol.</div>
+        <p class="bottle-desc">La madurez serena. Roble especiado, ciruela y un final largo donde la turba dialoga con el jerez Oloroso.</p>
+        <div class="bottle-price">€ 580</div>
+      </div>
+    </div>
+
+    <div class="bottle-card">
+      <div class="bottle-img">
+        <img src="https://images.unsplash.com/photo-1667928916119-2c2c5fe67b90?w=900&q=85&auto=format&fit=crop" alt="Vulkaner Edición Volcánica XXV" loading="lazy">
+      </div>
+      <div class="bottle-info">
+        <div class="bottle-edition">Pieza Maestra</div>
+        <h3 class="bottle-name">Edición Volcánica XXV</h3>
+        <div class="bottle-age">25 años · 46% vol. · 1.000 botellas</div>
+        <p class="bottle-desc">La cumbre. Numerada y firmada a mano. Una sinfonía de cuero, miel oscura, café tostado y humo legendario.</p>
+        <div class="bottle-price">€ 2.450</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ BODEGAS ══════════════════════════ -->
+<section id="bodegas" class="section-pad bodegas">
+  <div class="bodegas-header">
+    <div class="section-label">Capítulo V · Visitas privadas</div>
+    <h2 class="section-title">Cinco <em>bodegas</em>. Cinco mundos.</h2>
+    <p class="bodegas-intro">
+      Desde Speyside hasta Hokkaido, cinco enclaves donde el tiempo se detiene.
+      Cada bodega Vulkaner posee su propio carácter, dictado por el clima, la
+      tierra y los siglos. Reserve su visita privada.
+    </p>
+  </div>
+
+  <!-- Pestañas de países -->
+  <div class="bodegas-tabs" role="tablist">
+    <button class="bodega-tab active" data-bodega="scotland" role="tab" aria-selected="true">
+      <span class="tab-code">SCT</span>
+      <span class="tab-country">Escocia</span>
+      <span class="tab-place">Speyside</span>
+    </button>
+    <button class="bodega-tab" data-bodega="spain" role="tab" aria-selected="false">
+      <span class="tab-code">ESP</span>
+      <span class="tab-country">España</span>
+      <span class="tab-place">Jerez</span>
+    </button>
+    <button class="bodega-tab" data-bodega="japan" role="tab" aria-selected="false">
+      <span class="tab-code">JPN</span>
+      <span class="tab-country">Japón</span>
+      <span class="tab-place">Hokkaido</span>
+    </button>
+    <button class="bodega-tab" data-bodega="ireland" role="tab" aria-selected="false">
+      <span class="tab-code">IRL</span>
+      <span class="tab-country">Irlanda</span>
+      <span class="tab-place">Dublín</span>
+    </button>
+    <button class="bodega-tab" data-bodega="usa" role="tab" aria-selected="false">
+      <span class="tab-code">USA</span>
+      <span class="tab-country">Estados Unidos</span>
+      <span class="tab-place">Kentucky</span>
+    </button>
+  </div>
+
+  <!-- Contenido dinámico de la bodega activa -->
+  <div class="bodega-display">
+    <div class="bodega-image">
+      <img id="bodegaImg" src="https://images.unsplash.com/photo-1638286629485-bb417ced482e?w=1600&q=85&auto=format&fit=crop" alt="Bodega Vulkaner en Speyside, Escocia" loading="lazy">
+      <div class="bodega-image-caption" id="bodegaCaption">Glen Vulkaner, Aberlour</div>
+    </div>
+
+    <div class="bodega-info" id="bodegaInfo">
+      <div class="bodega-num" id="bodegaNum">I</div>
+      <div class="bodega-country-name" id="bodegaCountry">Speyside, Escocia</div>
+      <h3 class="bodega-name" id="bodegaName">La Casa Madre</h3>
+      <p class="bodega-desc" id="bodegaDesc">
+        La destilería original. Donde Magnus Vulkaner instaló su primer alambique
+        en 1887, junto al manantial mineral que aún hoy alimenta cada gota.
+        Visitarla es regresar al corazón ardiente de la marca.
+      </p>
+      <ul class="bodega-details">
+        <li><span>Fundación</span><span data-field="founded">1887</span></li>
+        <li><span>Horario</span><span data-field="hours">Lunes a Sábado · 10:00 — 18:00</span></li>
+        <li><span>Duración</span><span data-field="duration">2 horas con cata guiada</span></li>
+        <li><span>Dirección</span><span data-field="address">Glen Vulkaner, Aberlour, AB37 9AS</span></li>
+      </ul>
+      <a href="#contacto" class="btn bodega-cta">Reservar visita</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ PREMIOS ══════════════════════════ -->
+<section class="section-pad premios">
+  <div class="section-label">Reconocimientos</div>
+  <h2 class="section-title">El silencio de los <em>maestros</em>.</h2>
+
+  <p class="premios-quote">
+    Vulkaner XXV no se prueba: se contempla. Es uno de esos rarísimos whiskies
+    que detienen el tiempo desde el primer sorbo.
+  </p>
+  <p class="premios-author">Whisky Magazine · Edición de Coleccionista</p>
+
+  <div class="premios-grid">
+    <div class="premio">
+      <div class="premio-medal">★</div>
+      <div class="premio-year">2024</div>
+      <div class="premio-name">World Whiskies<br>Master Gold</div>
+    </div>
+    <div class="premio">
+      <div class="premio-medal">★</div>
+      <div class="premio-year">2023</div>
+      <div class="premio-name">International Spirits<br>Trophy Winner</div>
+    </div>
+    <div class="premio">
+      <div class="premio-medal">★</div>
+      <div class="premio-year">2022</div>
+      <div class="premio-name">Scotch Whisky<br>Masters</div>
+    </div>
+    <div class="premio">
+      <div class="premio-medal">★</div>
+      <div class="premio-year">2021</div>
+      <div class="premio-name">San Francisco<br>Double Gold</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ CTA ══════════════════════════ -->
+<section id="contacto" class="section-pad cta">
+  <div class="section-label" style="justify-content:center;">Reserva privada</div>
+  <h2 class="cta-title">Una experiencia<br>reservada a unos pocos.</h2>
+  <p class="cta-subtitle">
+    Las ediciones de Vulkaner se distribuyen a través de un círculo cerrado de
+    coleccionistas y establecimientos seleccionados. Si desea adquirir una
+    botella o solicitar una cata privada en nuestra destilería, contacte
+    directamente con nuestro consejero personal.
+  </p>
+  <a href="#formulario" class="btn">Solicitar contacto</a>
+</section>
+
+<!-- ══════════════════════════ FORMULARIO ══════════════════════════ -->
+<section id="formulario" class="section-pad contact-form">
+  <div class="contact-form-container">
+    <div class="section-label">Contacto privado</div>
+    <h2 class="section-title">Escríbanos su <em>petición</em>.</h2>
+    <p class="contact-form-intro">
+      Cada solicitud recibe atención personal. Háganos saber lo que busca y un
+      consejero personal le responderá en un plazo máximo de cuarenta y ocho horas.
+    </p>
+
+    <form id="contactForm" class="contact-form-fields" novalidate>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="nombre">Nombre completo</label>
+          <input type="text" id="nombre" name="nombre" required autocomplete="name">
+        </div>
+        <div class="form-field">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="telefono">Teléfono <span class="optional">(opcional)</span></label>
+          <input type="tel" id="telefono" name="telefono" autocomplete="tel">
+        </div>
+        <div class="form-field">
+          <label for="asunto">Motivo de contacto</label>
+          <select id="asunto" name="asunto" required>
+            <option value="">Seleccione una opción</option>
+            <option value="adquisicion">Adquisición de botella</option>
+            <option value="cata">Cata privada</option>
+            <option value="visita">Visita a bodega</option>
+            <option value="club">Club Vulkaner</option>
+            <option value="prensa">Prensa &amp; medios</option>
+            <option value="otro">Otra consulta</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="mensaje">Su mensaje</label>
+        <textarea id="mensaje" name="mensaje" rows="6" required placeholder="Cuéntenos en detalle lo que busca..."></textarea>
+      </div>
+
+      <div class="form-submit">
+        <button type="submit" class="btn">Enviar solicitud</button>
+      </div>
+
+      <p class="form-disclaimer">
+        Sus datos se tratan con la máxima confidencialidad y nunca serán compartidos con terceros.
+      </p>
+    </form>
+
+    <div id="formSuccess" class="form-success" hidden>
+      <div class="success-mark">◆</div>
+      <h3 class="success-title">Le responderemos pronto.</h3>
+      <p class="success-message">Gracias por su colaboración.</p>
+      <p class="success-detail">
+        Hemos recibido su mensaje. Un consejero personal de Vulkaner se pondrá en
+        contacto con usted en un plazo máximo de cuarenta y ocho horas.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ FOOTER ══════════════════════════ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h3>VULKANER</h3>
+      <p>Forjado en fuego. Refinado por el tiempo. Una destilería independiente desde 1887.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Casa</h4>
+      <ul>
+        <li><a href="#origen">Nuestra historia</a></li>
+        <li><a href="#proceso">El proceso</a></li>
+        <li><a href="#coleccion">La colección</a></li>
+        <li><a href="#">La destilería</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Privado</h4>
+      <ul>
+        <li><a href="#">Club Vulkaner</a></li>
+        <li><a href="#">Catas privadas</a></li>
+        <li><a href="#">Visitas a bodega</a></li>
+        <li><a href="#">Eventos</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <ul>
+        <li><a href="#">+34 911 000 000</a></li>
+        <li><a href="#">privado@vulkaner.com</a></li>
+        <li><a href="#">Speyside, Escocia</a></li>
+        <li><a href="#">Madrid · Londres · Tokio</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 Vulkaner Distillery Ltd. · Todos los derechos reservados.</span>
+    <span>Aviso legal · Política de privacidad · Cookies</span>
+  </div>
+
+  <p class="footer-warning">
+    Disfrute con moderación. La venta de bebidas alcohólicas está prohibida a menores de 18 años.
+  </p>
+</footer>
+
+<script>
+  // Navegación: cambia de estilo al hacer scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  });
+
+  // Reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.section-pad > *:not(.section-label):not(.section-title), .step, .bottle-card, .premio, .nota').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 1.2s cubic-bezier(.2,.7,.2,1), transform 1.2s cubic-bezier(.2,.7,.2,1)';
+    observer.observe(el);
+  });
+
+  // ═══════════════════════════════════════════════
+  // BODEGAS — Datos e interactividad de pestañas
+  // ═══════════════════════════════════════════════
+  const bodegasData = {
+    scotland: {
+      num: 'I',
+      country: 'Speyside, Escocia',
+      name: 'La Casa Madre',
+      caption: 'Glen Vulkaner, Aberlour',
+      desc: 'La destilería original. Donde Magnus Vulkaner instaló su primer alambique en 1887, junto al manantial mineral que aún hoy alimenta cada gota. Visitarla es regresar al corazón ardiente de la marca.',
+      image: 'https://images.unsplash.com/photo-1638286629485-bb417ced482e?w=1600&q=85&auto=format&fit=crop',
+      founded: '1887',
+      hours: 'Lunes a Sábado · 10:00 — 18:00',
+      duration: '2 horas con cata guiada',
+      address: 'Glen Vulkaner, Aberlour, AB37 9AS'
+    },
+    spain: {
+      num: 'II',
+      country: 'Jerez de la Frontera, España',
+      name: 'La Bodega del Sur',
+      caption: 'Calle Manuel María González',
+      desc: 'Donde los toneles de Oloroso completan su segunda vida. Las paredes encaladas albergan barricas centenarias que han transportado jerez durante décadas antes de acoger nuestro destilado, aportándole su carácter inconfundible.',
+      image: 'https://images.unsplash.com/photo-1570449102089-e430853b676d?w=1600&q=85&auto=format&fit=crop',
+      founded: '1962',
+      hours: 'Martes a Sábado · 11:00 — 17:00',
+      duration: '1.5 horas + cata maridada',
+      address: 'Calle Manuel María González 12, 11403 Jerez'
+    },
+    japan: {
+      num: 'III',
+      country: 'Hokkaido, Japón',
+      name: 'La Sala de los Cobres',
+      caption: 'Kutchan, al pie del monte Yotei',
+      desc: 'Nuestro outpost oriental, inaugurado en 2008. Replica los alambiques de Speyside con la precisión milimétrica japonesa. El agua del monte Yotei y el silencio del invierno boreal aportan una pureza que ninguna otra bodega iguala.',
+      image: 'https://images.unsplash.com/photo-1765989393169-40faf2dc1a3f?w=1600&q=85&auto=format&fit=crop',
+      founded: '2008',
+      hours: 'Solo con cita previa',
+      duration: '3 horas con maestro destilador',
+      address: '12-3 Yamada, Kutchan, Hokkaido 044-0078'
+    },
+    ireland: {
+      num: 'IV',
+      country: 'Dublín, Irlanda',
+      name: 'La Casa de la Ciudad',
+      caption: 'Merrion Square, distrito georgiano',
+      desc: 'Embajada urbana de Vulkaner en el corazón de Dublín. Aquí no destilamos: aquí se vive la marca. Catas privadas en bibliotecas de añadas, archivo histórico abierto al visitante y la mayor selección embotellada de toda la casa.',
+      image: 'https://images.unsplash.com/photo-1678448948513-1b1e8dad141f?w=1600&q=85&auto=format&fit=crop',
+      founded: '1995',
+      hours: 'Miércoles a Domingo · 12:00 — 22:00',
+      duration: 'Cata personalizada',
+      address: '18 Merrion Square North, Dublin D02'
+    },
+    usa: {
+      num: 'V',
+      country: 'Loretto, Kentucky',
+      name: 'El Almacén Americano',
+      caption: 'Condado de Marion, Bluegrass',
+      desc: 'Nuestras barricas de bourbon empiezan aquí su vida. Trabajamos con destilerías centenarias del condado de Bourbon que, después de utilizar sus toneles para su propio whiskey, nos los ceden para una segunda maduración.',
+      image: 'https://images.unsplash.com/photo-1771154767182-d91ed5106636?w=1600&q=85&auto=format&fit=crop',
+      founded: '1978',
+      hours: 'Visitas mensuales · Solo invitados',
+      duration: 'Jornada completa',
+      address: '3350 Burks Spring Rd, Loretto, KY 40037'
+    }
+  };
+
+  const bodegaTabs    = document.querySelectorAll('.bodega-tab');
+  const bodegaImg     = document.getElementById('bodegaImg');
+  const bodegaInfo    = document.getElementById('bodegaInfo');
+  const bodegaCaption = document.getElementById('bodegaCaption');
+
+  bodegaTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const key = tab.dataset.bodega;
+      const data = bodegasData[key];
+      if (!data) return;
+
+      // Estado activo
+      bodegaTabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+
+      // Fade out, swap, fade in
+      bodegaImg.classList.add('fade-out');
+      bodegaInfo.classList.add('fade-out');
+      bodegaCaption.classList.add('fade-out');
+
+      setTimeout(() => {
+        bodegaImg.src = data.image;
+        bodegaImg.alt = `Bodega Vulkaner en ${data.country}`;
+        bodegaCaption.textContent = data.caption;
+
+        document.getElementById('bodegaNum').textContent = data.num;
+        document.getElementById('bodegaCountry').textContent = data.country;
+        document.getElementById('bodegaName').textContent = data.name;
+        document.getElementById('bodegaDesc').textContent = data.desc;
+        document.querySelector('[data-field="founded"]').textContent = data.founded;
+        document.querySelector('[data-field="hours"]').textContent = data.hours;
+        document.querySelector('[data-field="duration"]').textContent = data.duration;
+        document.querySelector('[data-field="address"]').textContent = data.address;
+
+        requestAnimationFrame(() => {
+          bodegaImg.classList.remove('fade-out');
+          bodegaInfo.classList.remove('fade-out');
+          bodegaCaption.classList.remove('fade-out');
+        });
+      }, 400);
+    });
+  });
+
+  // Precarga de imágenes de bodegas para transiciones fluidas
+  Object.values(bodegasData).forEach(d => {
+    const img = new Image();
+    img.src = d.image;
+  });
+
+  // ═══════════════════════════════════════════════
+  // FORMULARIO DE CONTACTO — validación y envío
+  // ═══════════════════════════════════════════════
+  const contactForm = document.getElementById('contactForm');
+  const formSuccess = document.getElementById('formSuccess');
+
+  if (contactForm) {
+    // Quitar el estado de error mientras el usuario escribe
+    contactForm.querySelectorAll('input, select, textarea').forEach(field => {
+      const handler = () => field.parentElement.classList.remove('has-error');
+      field.addEventListener('input', handler);
+      field.addEventListener('change', handler);
+    });
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // Validación básica
+      const requiredFields = contactForm.querySelectorAll('[required]');
+      let firstInvalid = null;
+      requiredFields.forEach(field => {
+        const value = field.value.trim();
+        const isEmail = field.type === 'email';
+        const emailValid = !isEmail || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+        if (!value || !emailValid) {
+          field.parentElement.classList.add('has-error');
+          if (!firstInvalid) firstInvalid = field;
+        } else {
+          field.parentElement.classList.remove('has-error');
+        }
+      });
+
+      if (firstInvalid) {
+        firstInvalid.focus();
+        return;
+      }
+
+      // Ocultar formulario y mostrar mensaje de éxito
+      contactForm.style.display = 'none';
+      formSuccess.removeAttribute('hidden');
+      formSuccess.classList.add('show');
+
+      // Scroll suave hacia el mensaje
+      setTimeout(() => {
+        formSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    });
+  }
+</script>
+
+</body>
+</html>
